@@ -1,0 +1,310 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+ <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-16570840716"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-16570840716');
+</script>
+
+  <script src="https://trackings.nemu.com.br/trackings/script.js" async data-tracking-id="dwZqPa8tiT" crossorigin="anonymous"></script>
+  
+<!-- Google Tag Manager - AULA FNM -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KMX6FNRF');</script>
+<!-- End Google Tag Manager -->
+
+  
+  <!-- Hotjar Tracking Code for https://www.mulherplanet.com -->
+<script>
+    (function(h,o,t,j,a,r){
+        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+        h._hjSettings={hjid:3424423,hjsv:6};
+        a=o.getElementsByTagName('head')[0];
+        r=o.createElement('script');r.async=1;
+        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+        a.appendChild(r);
+    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
+  
+  {% comment %}
+    <!-- Meta Pixel Code -->
+      <script>
+      if(!window.fbq) {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '157725963757123');
+        fbq('track', 'PageView');
+      } else {
+        console.log('fbq not undefined')
+      }
+    </script>
+    
+      <noscript>
+    
+      <img height="1" loading="lazy" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=157725963757123&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+  {% endcomment %}
+
+  {% comment %}
+    Order confirmation code and information
+    ...
+ 
+  {% endcomment %}
+
+  <!--verificação do domínio da loja do shopify-->
+<meta name="facebook-domain-verification" content="yu02idx8ta7ylzjyq5wgh2u9va1tsn" />
+  
+
+
+  
+  <meta name="facebook-domain-verification" content="kiao9hmjl2dmym7twxom97bnkk0ezv" />
+
+
+  
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "dtq2jlbf5t");
+</script>
+  
+<!-- </script> -->
+
+  
+{% render 'pagefly-head' %}
+<!-- Added by AVADA SEO Suite -->
+{% include 'avada-seo' %}
+<!-- /Added by AVADA SEO Suite -->
+
+<meta name="google-site-verification" content="Xx5VVcGX8MisJ8Dg2KlbBUPfdACu9bg4r55geogAekQ" />
+  
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape | split: '[/countdown]' | last | strip_html }}">
+  {% endif %}
+
+  <!-- Product meta ================================================== -->
+  {% include 'fb-open-graph-tags' %}
+  {% include 'twitter-card' %}
+
+  <!-- Helpers ================================================== -->
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimal-ui">
+  
+  <!-- Favicon -->
+  {% if settings.favicon != blank %}
+  <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {% endif %}
+ 
+   <!-- fonts -->
+  {% include 'head_fonts' %}
+  
+  <!-- Styles -->
+  {% include 'head_styles' %}
+  
+   <!-- Scripts -->
+  {% include 'head_scripts' %}
+
+  <!-- Header hook for plugins ================================ -->
+  <!-- OutlinkStickyBtn CODE Start -->{% if template.name == 'product'%}{% render('outlink-sticky') %}{% endif %}<!-- OutlinkStickyBtn END --> {{ content_for_header }}
+
+  <!--[if lt IE 9]>
+  {{ '//html5shiv.googlecode.com/svn/trunk/html5.js' | script_tag }}
+  <![endif]-->
+
+  {% comment %}
+    If you store has customers disabled, you can remove the following JS file
+  {% endcomment %}
+  
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  {% include 'linked-options' %}
+	  
+<!-- RYVIU APP :: Settings global -->	
+    <script>
+        var ryviu_global_settings = {{shop.metafields.ryviu.user_settings }};
+    </script>
+<!-- RYVIU APP -->
+ 
+
+	{{ shop.metafields.loox["global_html_head"] }}
+
+<!-- RAFAEL LIMA Bloqueador de compras falsas externas na shopify -->
+<script>
+! function(f, b, e, v, n, t, s) {
+    if (f.fbq) return;
+    n = f.fbq = function() {
+        if (arguments[1] === "Purchase" && typeof arguments[2].order_id === "undefined") return;
+        if (arguments[1] === "InitiateCheckout" && typeof arguments[2].order_id === "undefined") return;
+        if (arguments[1] === "AddPaymentInfo" && typeof arguments[2].order_id === "undefined") return;
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s)
+}(window, document, 'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '{{settings.id_pixel}}');
+</script>
+<!-- RAFAEL LIMA Bloqueador de compras falsas externas na shopify -->
+
+
+</head>
+
+    {% if settings.layout_body == 'full' %}    
+        {%- assign layout_class = 'body-full' -%}   
+    {% elsif settings.layout_body == 'boxed' %} 
+        {%- assign layout_class = 'body-boxed' -%} 
+    {% endif %}
+
+    {% if settings.header_layout == 'vertical' %}
+        {%- assign header_class = 'header-vertical-tpl' -%} 
+    {% endif %}
+
+<body id="{{ page_title | handle }}" class="{{ header_class }} {{ layout_class }} {% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}">
+
+<!-- Google Tag Manager (noscript) FNM AULA -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMX6FNRF"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  
+    {% if template contains 'index' %}  
+    <h1 style="display: none">{{ page_title | split: '|' | first }}</h1>
+    {% endif %}
+    {% include 'wrapper-header' %}   
+
+    {% if settings.header_layout == 'vertical' %}
+    <div class="flex-nav-vertical">
+    {% endif %}    
+
+    {% if settings.header_layout == 'vertical' %}
+    {% section 'navigation-vertical-menu' %}
+    {% endif %}
+	{% include 'scheme' %}
+    <div class="wrapper-container wrapper-body">	
+        <main class="main-content" role="main">      
+            {{ content_for_layout }}
+        </main>    
+            
+        {% if settings.footer_layout == 'default' %}        
+        {% section 'footer' %}
+        {% elsif settings.footer_layout == 'parallax' %}
+        {% section 'footer-parallax' %}
+        {% elsif settings.footer_layout == '02' %}
+        {% section 'footer-2' %}
+        {% elsif settings.footer_layout == '03' %}
+        {% section 'footer-3' %}
+        {% elsif settings.footer_layout == '04' %}
+        {% section 'footer-4' %}
+        {% elsif settings.footer_layout == '05' %}
+        {% section 'footer-5' %}
+        {% endif %}
+
+        {% unless template contains 'product' %}
+        <div class="footbar-fixed">
+            {% section 'someone-purchased' %}
+            {% section 'GDPR-modal' %}
+        </div>
+        {% endunless %}
+      {% if settings.enable_backtotop %}
+        <div id="back-top" style="display: none;">
+            <a class="nav_up" href="#top" title="Back to top">
+                <i class="fa fa-angle-up" aria-hidden="true"></i>
+            </a>
+        </div>  
+      {% endif %}
+    </div>
+
+    {% if settings.header_layout == 'vertical' %}
+    </div>
+    {% endif %}  
+    
+    {% include 'footer_scripts' %}
+    
+    {% include 'sweettooth-widgets' %}
+
+    {% include 'search-autocomplete' %}
+    
+    {% if settings.header_layout == 'default' %}
+    {% include 'customer_links' %}
+
+    {% else %}
+    <div class="translate-header" data-translate-header>
+        {% include 'customer_links' %}
+        {% include 'wrapper-top-cart' %}
+    </div>
+    {% endif %}
+
+    {% include 'size-chart' %}
+        
+    {% include 'message-modal' %}
+    
+    {% include 'newsletter' %}      
+    
+    {% if template contains 'product' %}
+    {% include 'ask_an_expert' %}  
+    {% endif %}
+    {% include 'recently-viewed-products'%}
+    <div class="wrapper-overlay"></div>
+    {{ 'instant.js' | asset_url | script_tag }}
+    {% comment %}
+      {% if order %}
+        <!-- Facebook Pixel Purchase Event -->
+        <script>
+          console.log('meta pixel sended...')
+          fbq('track', 'Purchase', {currency: "RL", value: {{ order.total_price | money_without_currency | remove: ',' }}}, {eventId: order.id});
+        </script>
+    {% endif %}
+    
+    {% endcomment %}
+<!--   </script>
+    fbq('track', 'Purchase', {currency: "RL", value: 30.00});
+  </script> -->
+  
+
+
+<!-- Não remova. UnicoPag. -->
+<!--ThemeInsert: 11/04/2024 12:30:19-->
+{% capture unico_snippet_content %}{% include 'UnicoPagSnippet' %}{% endcapture %} {% unless unico_snippet_content contains 'Liquid error' %} {% include 'UnicoPagSnippet' %} {% endunless %}
+<!-- Não remova. UnicoPag. -->
+</body>
+</html>

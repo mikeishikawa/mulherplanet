@@ -1,0 +1,719 @@
+<style>
+    .unico-loader {
+        display: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        left: 0;
+        top: 0;
+        z-index: 99999
+    }
+
+    .unico-loading {
+        position: fixed;
+        overflow: show;
+        margin: auto;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 50px;
+        height: 50px
+    }
+
+    .unico-loading:before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, .5)
+    }
+
+    .unico-loading:not(:required) {
+        font: 0/0 a;
+        color: transparent;
+        text-shadow: none;
+        background-color: transparent;
+        border: 0
+    }
+
+    .unico-loading:not(:required):after {
+        content: '';
+        display: block;
+        font-size: 10px;
+        width: 50px;
+        height: 50px;
+        margin-top: -.5em;
+        border: 5px solid #999;
+        border-radius: 100%;
+        border-bottom-color: transparent;
+        -webkit-animation: spinner 1s linear 0s infinite;
+        animation: spinner 1s linear 0s infinite
+    }
+
+    @-webkit-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg)
+        }
+    }
+
+    @-moz-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg)
+        }
+    }
+
+    @-o-keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg)
+        }
+    }
+
+    @keyframes spinner {
+        0% {
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+            -o-transform: rotate(360deg);
+            transform: rotate(360deg)
+        }
+    }
+</style>
+
+<div class="unico-loader">
+    <div class="unico-loading"></div>
+</div>
+
+<script>
+    window.tracker_init = false;
+    const script = document.createElement('script')
+    script.type = 'module'
+    script.src = 'https://app.unicopag.com.br/tracker.js'
+    script.onload = async () => {
+        await init();
+        window.tracker_init = true;
+    }
+    document.head.appendChild(script)
+</script>
+
+<script>
+  var entrou = false;
+    const loadScriptUnicoPag = function (url, callback) {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        // If the browser is Internet Explorer.
+        if (script.readyState) {
+            script.onreadystatechange = function () {
+                if (script.readyState === 'loaded' || script.readyState === 'complete') {
+                    script.onreadystatechange = null;
+                    callback();
+                    setTimeout(() => {
+                        mainUnicoPagRedirect();
+                    }, 500);
+                }
+            };
+            // For any other browser.
+        } else {
+            script.onload = function () {
+                callback();
+                setTimeout(() => {
+                    mainUnicoPagRedirect();
+                }, 500);
+            };
+        }
+        script.src = url;
+        document.getElementsByTagName('head')[0].appendChild(script);
+
+
+    };
+
+    if (!window.jQuery || typeof jQuery == 'undefined' || jQuery == null) {
+        loadScriptUnicoPag('https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js', () => {
+            console.log('UnicoPag jQuery loaded');
+            mainUnicoPagRedirect();
+        });
+    } else {
+        mainUnicoPagRedirect();
+    }
+  
+    function mainUnicoPagRedirect() {
+        console.warn("mainUnicoPagRedirect LOADED");
+        var currentPage = '{{ template.name }}'
+            , cartEndpoint = ''
+            , statusEndpoint = 'https://api.unicopag.com.br/api/api/integrations/shopify/check?shop={{ shop.permanent_domain }}'
+            , shop = '{{ shop.secure_url }}'
+            , shopifyInternalUrl = '{{ shop.permanent_domain }}'
+            , unc_hasUrlSupport = 'undefined' !== typeof URL && 'undefined' !== typeof URLSearchParams
+            , unc_utmCookieName = 'utmsTrack';
+
+        window.unicoCheckoutUrl = '';
+
+        var checkoutBtncss = '<style id="unc-btn-style" type="text/css"> body .unc-CrtpageMainFrm input[type="submit"]:not([name="update"]), body .unc-CrtpageMainFrm button[type="submit"]:not([name="update"]), body .unc_check_mainBtn[name="checkout"]:not([class*="unc_elem_"]):not([name="update"]), body input.unc_check_mainBtn:not([class*="unc_elem_"]):not([name="update"]) { display: none !important; }body .unc-CrtpageMainFrm .unc_check_mainBtn.unc_elem_mainBtn[type="submit"]:not(.bold_hidden){ display: inline-block !important; } </style>';
+
+        function showunicoLoader() {
+            var el = document.querySelector('.unico-loader');
+            el.style.display = 'block';
+        }
+
+        function hideunicoLoader() {
+            var el = document.querySelector('.unico-loader');
+            el.style.display = 'none';
+        }
+
+        // Cart
+        if (currentPage == 'cart') {
+            showunicoLoader();
+            console.warn(window.uncData, 'TESTE')
+            getAjax('/cart.json', function (response) {
+                var cartPayload = JSON.parse(response);
+                console.log(cartPayload)
+                var data = {
+                    shop: window.location.host,
+                    shopify_internal_domain: shopifyInternalUrl,
+                    cart_payload: cartPayload,
+                };
+
+                console.log(data)
+
+                getAjax(statusEndpoint, function (response) {
+                    var responseData = JSON.parse(response);
+
+                    console.log(responseData)
+
+                    if (responseData.active) {
+
+                        localStorage.setItem('store_id', responseData.store);
+
+                        let customCheckoutDomain = (typeof responseData.custom_domain !== 'undefined' && responseData.custom_domain !== '') ? `https://${responseData.custom_domain}` : 'https://pay.unicopag.com.br/';
+
+                        setTimeout(() => {
+                            if (window.tracker_init) {
+                                callTrackEvent('AddToCart', { shop: '{{ shop.permanent_domain }}', shopifyInternalUrl: '{{ shop.permanent_domain }}' });
+                            }
+                        }, 1000)
+
+                        var otherButtons = document.querySelectorAll('.cartX_check_mainBtn, .cartx-CrtpageMainFrm, .ymp-CrtpageMainFrm');
+                        
+                        for (var i = 0; i < otherButtons.length; i++) {
+                            otherButtons[i].setAttribute('style', 'display: none !important');
+                        }
+
+                        if (responseData.skip_cart) {
+                            console.log(responseData.skip_cart)
+
+                            getAjax('/cart.json', function (response) {
+                                var cartPayload = JSON.parse(response);
+
+                                var multiple = cartPayload.items.map(function (elem) {
+                                    return (elem.id + ':' + elem.quantity);
+                                }).join(",");
+
+                                var custom_options = cartPayload.items.map(function (elem) {
+                                    return encodeURI((elem.id + ':-:' + JSON.stringify(elem.properties)));
+                                }).join("::");
+
+
+                                if (typeof cartPayload.items[0] !== 'undefined' && typeof cartPayload.items[0].variant_id !== 'undefined' && cartPayload.items[0].variant_id !== '') {
+
+                                    postAjax('/cart/clear.js', JSON.stringify({}));
+                                    window.location = unc_getUrlWithUtms(`${customCheckoutDomain}/${cartPayload.items[0].variant_id}?multiple=${multiple}&custom_options=${custom_options}`)
+                                }
+                            });
+                        } else {
+                            hideunicoLoader();
+                        }
+
+                        var getHead = document.getElementsByTagName('head')[0];
+                        getHead.insertAdjacentHTML('beforeend', checkoutBtncss);
+                        var getForm = document.getElementsByTagName('form'); var cartFrmId, getCheckoutBtn, getCheckoutBtnList = [];
+
+     
+                        
+                        for (var i = 0; i < getForm.length; i++) {
+                        
+                            var formAction = getForm[i].action; formAction = formAction.split(shop);
+
+                            if (formAction.includes('/cart') == true || formAction[0].includes('/cart') == true) {
+                                if (getForm[i].getAttribute('id')) {
+                                    cartFrmId = getForm[i].getAttribute('id');
+                                } else {
+                                    getForm[i].setAttribute('id', 'unc-CrtpageMainFrm'); cartFrmId = getForm[i].getAttribute('id');
+                                }
+                                getForm[i].classList.add('unc-CrtpageMainFrm');
+                                getCheckoutBtn = getForm[i].elements['checkout'] || document.querySelector('a[href="/checkout"]') || document.querySelector('form[action="/cart"] input[type="submit"]') || document.querySelector('form[action="/cart"] input[name="checkout"]') || document.querySelector('form[action="/cart"] button[name="checkout"]');
+
+                                getCheckoutBtnList[i] = getCheckoutBtn;
+                                
+                                if (getCheckoutBtn.length == undefined) {
+                                    var buttonValue = getCheckoutBtn.value ? getCheckoutBtn.value : getCheckoutBtn.textContent;
+                                } else {
+                                    var lastBtnID = getCheckoutBtn.length - 1;
+                                    var buttonValue = getCheckoutBtn[lastBtnID].value ? getCheckoutBtn[lastBtnID].value : getCheckoutBtn[lastBtnID].textContent;
+                                }
+                                var getSubBtnId = getCheckoutBtn.id;
+                                if (getSubBtnId) {
+                                    getSubBtnId = getSubBtnId + 'uncButton';
+                                } else {
+                                    getSubBtnId = 'uncBtn';
+                                }
+                                  
+                                if (getCheckoutBtn.length == undefined) {
+                                    var inptBtn = `<button type='submit' class='` + getCheckoutBtn.className + ` unc_check_mainBtn unc_elem_mainBtn' id='` + getSubBtnId + `'>` + buttonValue + `</button>`;
+                                    getCheckoutBtn.insertAdjacentHTML('afterEnd', inptBtn);
+                                    var entrou = true;
+                                } else {
+                                    var inptBtn = `<button type='submit' class='` + getCheckoutBtn[getCheckoutBtn.length - 1].className + ` unc_check_mainBtn unc_elem_mainBtn' id='` + getSubBtnId + `'>` + buttonValue + `</button>`;
+                                    getCheckoutBtn[getCheckoutBtn.length - 1].insertAdjacentHTML('afterEnd', inptBtn);
+                                    var entrou = true;
+                                }
+
+
+                                // document.getElementById(getSubBtnId).addEventListener('click', fakeClick);
+
+                                document.getElementById(getSubBtnId).addEventListener('click', (e) => {
+                                    fakeClick(e, cartPayload, customCheckoutDomain)
+                                });
+
+                              
+
+                               
+                            }
+                        }
+
+                        if (window.$ || window.jQuery) {
+                            var btns = $('a.btn-checkout[href="/checkout"]').not('.unc_elem_mainBtn');
+                            
+                            btns.hide();
+
+                            var btns2 = $(getCheckoutBtnList).remove();
+                            var checkMoreThanOneButtons = document.querySelectorAll('#uncBtn')||[];
+
+                            if(checkMoreThanOneButtons.length > 1){
+                                checkMoreThanOneButtons.forEach((v,k) => {
+                                    if(k !== 0){
+                                      $(checkMoreThanOneButtons[k]).remove();
+                                    }
+                                });
+                            }
+                        }
+
+                    } else {
+                        console.log(responseData.message)
+                    }
+
+                });
+            });
+        } else {
+            console.log("out cart")
+        }
+
+                   
+           
+
+
+        // Product
+        var uncData = '';
+
+        // if (window.$ || window.jQuery) {
+
+        var checkoutButtons = document.querySelector('.btn-checkout');
+
+
+        if (currentPage == 'product') {
+            console.warn("DEBUG: ################### 1");
+            // if (currentPage == 'product' || currentPage == 'index') {
+            hideunicoLoader()
+
+            // var uncSelectors = document.querySelectorAll('input[name="add"] , button[name=\'add\'], #add-to-cart, .add-to-cart, #AddToCartText ,#AddToCart, .ProductForm__AddToCart, #buttonBuy');
+            // uncSelectors.forEach(function (v, k) {
+            //     // v.disabled = true;
+            //     v.removeAttribute("onclick");
+            // });
+
+
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                console.warn("DEBUG: ################### 2");
+                if (this.readyState == 4 && this.status == 200) {
+                    uncData = JSON.parse(this.response);
+
+                    let customCheckoutDomain = (typeof uncData.custom_domain !== 'undefined' && uncData.custom_domain !== '') ? `https://${uncData.custom_domain}` : 'https://pay.unicopag.com.br/';
+
+                    var inputQuantity = document.querySelector('input[name="quantity"]');
+
+                    if (uncData && uncData.active) {
+                        console.warn("DEBUG: ################### 3", uncData.active);
+                        localStorage.setItem('store_id', uncData.store);
+
+                        window.uncData = uncData;
+
+                        console.log(uncData)
+
+                        if (currentPage == 'product') {
+                            setTimeout(() => {
+                                if (window.tracker_init) {
+                                    callTrackEvent('ViewContent', { shop: '{{ shop.permanent_domain }}', shopifyInternalUrl: '{{ shop.permanent_domain }}' });
+                                }
+                            }, 1000)
+                        }
+
+
+                        if (uncData.cart_ajax === false) {
+
+                            var uncSelectors = document.querySelectorAll('input[name="add"] , button[name=\'add\'], #add-to-cart, .add-to-cart, #AddToCartText ,#AddToCart, .ProductForm__AddToCart, #buttonBuy');
+                            uncSelectors.forEach(function (v, k) {
+                                uncSelectors[k].disabled = false;
+                                //   if (uncData.cart_ajax === true) {
+                                //       console.log(uncData)
+                                //       uncSelectors[k].classList.add(`unc_mainBtn`);
+                                //       uncSelectors[k].classList.add(`unc_elem_${k}`);
+                                //       uncSelectors[k].disabled = false;
+                                //   } else {
+
+                                //   }
+
+                                uncSelectors[k].classList.add(`unc_mainBtn unc_check_mainBtn unc_elem_mainBtn`);
+                                uncSelectors[k].classList.add(`unc_elem_${k}`);
+
+                                //   var inptBtn2 = `<button class='` + uncSelectors[k].className + ` unc_mainBtn unc_elem_${k} unc_check_mainBtn unc_elem_mainBtn'>${v.innerText}</button>`;
+
+                                //   uncSelectors[k].insertAdjacentHTML('afterEnd', inptBtn2);
+                                //   uncSelectors[k].remove();
+
+                            });
+
+                            var clickButtonUnico = document.querySelectorAll(".unc_mainBtn");
+
+                            var inputID = document.querySelector('input[name="id"], select[name="id"]');
+                            console.log(inputID)
+
+
+                            if (clickButtonUnico) {
+
+
+                                clickButtonUnico.forEach(function (v, k) {
+                                    clickButtonUnico[k].addEventListener("click", function (event) {
+
+                                        event.preventDefault();
+
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.open('POST', '/cart/add.js', true);
+                                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                        xhr.onreadystatechange = function () {
+
+                                            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+                                                if (uncData.skip_cart) {
+                                                    getAjax('/cart.json', function (response) {
+
+                                                        var cartPayload = JSON.parse(response);
+                                                        // console.log(cartPayload);
+                                                        var multiple = cartPayload.items.map(function (elem) {
+                                                            return (elem.id + ':' + elem.quantity);
+                                                        }).join(",");
+
+                                                        var custom_options = cartPayload.items.map(function (elem) {
+                                                            return (elem.id + ':-:' + btoa(JSON.stringify(elem.properties)));
+                                                        }).join("::");
+
+                                                        if (typeof cartPayload.items[0] !== 'undefined' && typeof cartPayload.items[0].variant_id !== 'undefined' && cartPayload.items[0].variant_id !== '') {
+                                                            postAjax('/cart/clear.js', JSON.stringify({}));
+                                                            window.location.href = unc_getUrlWithUtms(`${customCheckoutDomain}/${cartPayload.items[0].variant_id}?multiple=${multiple}&custom_options=${custom_options}`)
+                                                        }
+                                                    });
+                                                } else {
+                                                    window.location.href = `/cart`;
+                                                }
+                                            }
+                                        }
+
+                                        xhr.send(`id=${inputID?.value ?? null}&quantity=${inputQuantity?.value ?? 1}`);
+
+                                    });
+                                })
+                            }
+                        }
+
+
+
+                    } else {
+                        uncSelectors.removeAttr('disabled');
+                    }
+
+                }
+            };
+
+            xhttp.open('GET', 'https://api.unicopag.com.br/api/api/integrations/shopify/check?shop=' + shopifyInternalUrl);
+            xhttp.send();
+
+        } else {
+            console.log("Out product")
+        }
+        // } else {
+        //     console.log("not using jquery")
+        // }
+
+        function showunicoPurchaseConfirmation(purchaseUrl) {
+            var element = document.getElementById('unicoPurchaseConfirmationWrapper');
+            element.setAttribute('class', 'active');
+
+            var button = document.getElementById('unicoPurchaseConfirmationButton');
+
+            hideunicoLoader();
+        }
+
+        function getAjax(url, success) {
+            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+            xhr.open('GET', url);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState > 3 && xhr.status == 200) success(xhr.responseText);
+            };
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.send();
+
+            return xhr;
+        }
+
+        function postAjax(url, data, success) {
+            var params = typeof data == 'string' ? data : Object.keys(data).map(
+                function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) },
+            ).join('&');
+
+            var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+            xhr.open('POST', url);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState > 3 && xhr.status == 200) { success(xhr.responseText); }
+            };
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(params);
+
+            return xhr;
+        }
+
+
+        function fakeClick(event, cartPayload, customCheckoutDomain = 'https://pay.unicopag.com.br') {
+            event.preventDefault();
+
+            showunicoLoader();
+
+            var multiple = cartPayload.items.map(function (elem) {
+                return (elem.id + ':' + elem.quantity);
+            }).join(",");
+
+
+
+            if (typeof cartPayload.items[0] !== 'undefined' && typeof cartPayload.items[0].variant_id !== 'undefined' && cartPayload.items[0].variant_id !== '') {
+                window.location.href = unc_getUrlWithUtms(`${customCheckoutDomain}/${cartPayload.items[0].variant_id}?multiple=${multiple}`)
+            }
+
+        }
+
+
+        function unicoClick() {
+
+            showunicoLoader();
+
+            getAjax('/cart.json', function (response) {
+                var cartPayload = JSON.parse(response);
+
+                var data = {
+                    shop: window.location.host,
+                    cart_payload: cartPayload,
+                };
+
+                postAjax(cartEndpoint, JSON.stringify(data), function (response) {
+                    var resp = JSON.parse(response);
+
+                    window.location.href = unc_getUrlWithUtms(resp.checkout_direct_url);
+                });
+            });
+        }
+
+        function getNewCheckoutURL() {
+            getAjax('/cart.json', function (response) {
+                var cartPayload = JSON.parse(response);
+
+                var data = {
+                    shop: window.location.host,
+                    cart_payload: cartPayload,
+                };
+
+                postAjax(cartEndpoint, JSON.stringify(data), function (response) {
+                    var resp = JSON.parse(response);
+
+                    postAjax('/cart/clear.js', JSON.stringify({}), function () {
+                        window.location.href = unc_getUrlWithUtms(resp.checkout_direct_url);
+                    });
+                });
+            });
+        }
+
+        // Verifica se existem botões redirecionando para /a/checkout
+        if (window.$ || window.jQuery) {
+            var oldLinks = $('a[href="/a/checkout"]').not('.unico-btn-finalize').addClass('unico-btn-finalize-single');
+
+
+            $('.unico-btn-finalize-single').on('click', function (e) {
+                e.preventDefault();
+
+                if (currentPage == 'cart') {
+                    window.location.href = unc_getUrlWithUtms(window.unicoCheckoutUrl);
+                } else {
+                    window.location = `/cart`;
+                }
+
+            });
+        }
+
+        function isFacebookBrowser() {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+
+            return (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+        }
+
+        function isAndroid() {
+            var ua = navigator.userAgent.toLowerCase();
+
+            return ua.indexOf("android") > -1;
+        }
+
+        if (unc_hasUrlSupport) {
+            var unc_terms = ['utm_source', 'utm_campaign', 'utm_term', 'utm_medium', 'utm_content', 'fbclid'],
+                unc_currentUrl = new URL(window.location.href),
+                unc_urlParams = unc_currentUrl.searchParams;
+
+            unc_terms.forEach(function (term) {
+                if (unc_urlParams.has(term)) {
+                    unc_setUtm(term, unc_urlParams.get(term));
+                }
+            });
+        }
+
+        function unc_getUrlWithUtms(url) {
+            if (!unc_hasUrlSupport || !url) {
+                return url;
+            }
+
+            var currentUrl = new URL(url),
+                _ga = unc_getCookie('_ga'),
+                cookiesUtms = unc_getUtms();
+
+            cookiesUtms.forEach(function (value, key) {
+                currentUrl.searchParams.set(key, value);
+            });
+
+            if (_ga) {
+                currentUrl.searchParams.set('_ga', _ga);
+            }
+
+            let _upsession = localStorage.getItem('_upsession');
+            if (_upsession) {
+                currentUrl.searchParams.set('_upsession', _upsession);
+            }
+
+            return currentUrl.href;
+        }
+
+        function unc_setUtm(term, value) {
+            var params = unc_getUtms();
+
+            params.set(term, value);
+            unc_setCookie(unc_utmCookieName, params.toString(), 30);
+        }
+
+        function unc_getUtms() {
+            var currentUtms = unc_getCookie(unc_utmCookieName);
+
+            if (currentUtms) {
+                return new URLSearchParams(currentUtms);
+            }
+
+            return new URLSearchParams();
+        }
+
+        function unc_setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function unc_getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+
+            return null;
+        }
+    }
+
+    console.warn("VERSÃO 2024")
+</script>
+<div id="unicoPurchaseConfirmationWrapper" style="display:none">
+    <div>
+        <p class="unico_purchase_title">✔️ Produto adicionado com sucesso.</p>
+        <button type="button" onclick="getNewCheckoutURL()" id="unicoPurchaseConfirmationButton"
+            class="unico_purchase_confirmation_btn">
+            Finalizar compra
+        </button>
+    </div>
+</div>
+<!-- Snippet Updated V2.7 - 03/04/2024 -->
